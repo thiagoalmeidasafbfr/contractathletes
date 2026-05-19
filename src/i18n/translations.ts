@@ -155,7 +155,6 @@ export const translations: Record<string, TranslationEntry> = {
 
   // ── Tipos de despesa / conteúdo de células ────────────────────────
   'Transfer Agreement':      { pt: 'Transfer Agreement',   en: 'Transfer Agreement',        es: 'Contrato de Transferencia' },
-  'Transfer Fee':            { pt: 'Transfer Fee',         en: 'Transfer Fee',              es: 'Tasa de Transferencia' },
   'Comissão - Entrada':      { pt: 'Comissão - Entrada',   en: 'Entry Commission',          es: 'Comisión de Entrada' },
   'Rescisão':                { pt: 'Rescisão',             en: 'Termination',               es: 'Rescisión' },
   'Performance':             { pt: 'Performance',          en: 'Performance',               es: 'Rendimiento' },
@@ -165,8 +164,6 @@ export const translations: Record<string, TranslationEntry> = {
   'Valores brutos':          { pt: 'Valores brutos',       en: 'Gross values',              es: 'Valores brutos' },
   'Bicho 2024':              { pt: 'Bicho 2024',           en: 'Bonus 2024',                es: 'Bonus 2024' },
   'Bicho 2025':              { pt: 'Bicho 2025',           en: 'Bonus 2025',                es: 'Bonus 2025' },
-  'Bicho por Competição':    { pt: 'Bicho por Competição', en: 'Bonus by Competition',      es: 'Prima por Competición' },
-
   // ── Geral ──────────────────────────────────────────────────────────
   'Atualizado':             { pt: 'Atualizado',          en: 'Updated',                 es: 'Actualizado' },
   'Idioma':                 { pt: 'Idioma',              en: 'Language',                es: 'Idioma' },
@@ -176,7 +173,6 @@ export const translations: Record<string, TranslationEntry> = {
   'Buscar clube credor...':  { pt: 'Buscar clube credor...', en: 'Search creditor club...', es: 'Buscar club acreedor...' },
   'Selecione um intermediário para exibir': { pt: 'Selecione um intermediário para exibir', en: 'Select an intermediary to display', es: 'Seleccione un intermediario para mostrar' },
   'Foto definitiva disponível em breve': { pt: 'Foto definitiva disponível em breve', en: 'Official photo available soon', es: 'Foto oficial disponible pronto' },
-  'Comissão - Entrada': { pt: 'Comissão - Entrada', en: 'Entry Commission', es: 'Comisión de Entrada' },
   'Contrato de Representação': { pt: 'Contrato de Representação', en: 'Representation Agreement', es: 'Contrato de Representación' },
 
   // ── PageImagem ─────────────────────────────────────────────────────

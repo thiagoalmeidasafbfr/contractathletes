@@ -33,15 +33,8 @@ const contractBg: Record<string, string> = {
 const contractColor: Record<string, string> = {
   'Elenco': '#1a7a4a', 'Emprestado': '#e67e22', 'Rescindido': '#c0392b',
 }
-const darkContractBg: Record<string, string> = {
-  'Elenco': '#0d2e1e', 'Emprestado': '#2a1e0a', 'Rescindido': '#2d1520',
-}
-const darkContractColor: Record<string, string> = {
-  'Elenco': '#4fd38c', 'Emprestado': '#f0a050', 'Rescindido': '#f07070',
-}
-
 export default function PageImagem() {
-  const { fmtMiC, symbol, t, navigateToAtleta, isDark } = useApp()
+  const { fmtMiC, symbol, t, navigateToAtleta } = useApp()
 
   const [busca, setBusca] = useState('')
   const [statusFiltro, setStatusFiltro] = useState('Todos')

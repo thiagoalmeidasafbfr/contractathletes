@@ -65,7 +65,7 @@ function SortIcon({ active, dir }: { active: boolean; dir: 'asc' | 'desc' }) {
 }
 
 export default function PageIntermediarios() {
-  const { fmtMiC, symbol, t, isDark } = useApp()
+  const { fmtMiC, symbol, t } = useApp()
 
   const [sortField, setSortField] = useState<string>('')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')

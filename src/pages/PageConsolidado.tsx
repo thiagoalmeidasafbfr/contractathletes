@@ -13,7 +13,7 @@ const inss = (clt: number) => clt * 0.05
 const feriasAnual = (clt: number) => clt / 3
 const decimoTerceiro = (clt: number) => clt
 
-const custoMensal = (a: ReturnType<typeof atletas[0]['salarioCLT']['toFixed']> extends string ? never : (typeof atletas)[number]) =>
+const custoMensal = (a: (typeof atletas)[number]) =>
   a.salarioCLT + a.direitoImagem + a.auxilioMoradiaM + a.auxilioAlimentacaoM + a.outrosAuxiliosM
   + fgts(a.salarioCLT) + inss(a.salarioCLT)
 

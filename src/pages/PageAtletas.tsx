@@ -29,15 +29,6 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
-function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div style={{ marginBottom: 2 }}>
-      <span style={{ fontSize: 10, color: '#999', fontWeight: 500, fontFamily: font }}>{label}: </span>
-      <span style={{ fontSize: 11, color: '#222', fontWeight: 500, fontFamily: font }}>{value}</span>
-    </div>
-  )
-}
-
 function TableCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="card" style={{ overflow: 'hidden' }}>
@@ -47,16 +38,6 @@ function TableCard({ title, children }: { title: string; children: React.ReactNo
       <div style={{ overflowY: 'auto', overflowX: 'hidden', maxHeight: 220 }}>
         {children}
       </div>
-    </div>
-  )
-}
-
-function KpiTop({ label: rawLabel, sub, value }: { label: string; sub?: string; value: string }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 12px', borderRight: '1px solid #e8e8e8', flexShrink: 0 }}>
-      <div style={{ fontSize: 9, fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: font }}>{rawLabel}</div>
-      {sub && <div style={{ fontSize: 9, color: '#aaa', fontFamily: font }}>{sub}</div>}
-      <div style={{ fontSize: 14, fontWeight: 700, color: '#000', marginTop: 2, fontFamily: font }}>{value}</div>
     </div>
   )
 }
@@ -157,7 +138,7 @@ const th: React.CSSProperties = { padding: '5px 6px', fontSize: 9, fontWeight: 7
 const trH: React.CSSProperties = { height: 48 }
 
 export default function PageAtletas() {
-  const { fmtMiC, fmtC, convert, symbol, t, openAtletaId, clearOpenAtleta } = useApp()
+  const { fmtMiC, fmtC, convert, t, openAtletaId, clearOpenAtleta } = useApp()
 
   const [statusFiltro, setStatusFiltro] = useState<StatusContrato | 'Todos'>('Todos')
   const [alocacaoFiltro, setAlocacaoFiltro] = useState<Alocacao | 'Todos'>('Todos')
@@ -188,10 +169,6 @@ export default function PageAtletas() {
   const condSal     = condicionaisSalario.filter(p => p.atletaId === a.id)
   const pasClube    = passivosClube.filter(p => p.atletaId === a.id)
   const pasInter    = passivosIntermediario.filter(p => p.atletaId === a.id)
-
-  const tfTotal = a.transferFeeTotal > 0
-    ? fmtMiC(convert(a.transferFeeTotal, a.transferFeeMoeda))
-    : `${a.transferFeeMoeda === 'BRL' ? 'R$' : a.transferFeeMoeda} 0,0`
 
   // ── Cálculos de custo total ──
   const hoje = new Date()
@@ -234,7 +211,6 @@ export default function PageAtletas() {
   const custoPrevistoTransf = tfPrevisto + interPrevisto
   const custoTotalPago      = custoPagoAtleta + custoPagoTransf
   const custoTotalPrevisto  = custoPrevistoAtleta + custoPrevistoTransf
-  const valorMercadoConv    = convert(a.valorMercado, a.valorMercadoMoeda)
 
   return (
     <div style={{ padding: '8px 12px', maxWidth: 1600, margin: '0 auto', fontFamily: font }}>

@@ -1,11 +1,26 @@
 import { useApp, CURRENCY_OPTIONS, type AppCurrency } from '../context/AppContext'
 
-const PAGES = [
-  { key: 'atletas',       label: 'Atletas' },
-  { key: 'clubes',        label: 'Clubes' },
-  { key: 'intermediarios',label: 'Intermediários' },
-  { key: 'consolidado',   label: 'Consolidado' },
-  { key: 'imagem',        label: 'Imagem' },
+const NAV_SECTIONS = [
+  {
+    label: 'Gestão',
+    items: [
+      { key: 'atletas',    label: 'Atletas' },
+      { key: 'consolidado',label: 'Consolidado' },
+    ],
+  },
+  {
+    label: 'Passivos',
+    items: [
+      { key: 'clubes',         label: 'Clubes' },
+      { key: 'intermediarios', label: 'Intermediários' },
+    ],
+  },
+  {
+    label: 'Direitos',
+    items: [
+      { key: 'imagem', label: 'Imagem' },
+    ],
+  },
 ]
 
 const LANGS = ['PT', 'EN', 'ES'] as const
@@ -15,122 +30,200 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  const { currency, setCurrency, language, setLanguage, currentPage: page, setCurrentPage: setPage, isDark, toggleDark } = useApp()
+  const { currency, setCurrency, language, setLanguage, currentPage: page, setCurrentPage: setPage } = useApp()
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F0F2F5' }}>
-      {/* Header */}
-      <div style={{
-        position: 'fixed', top: 0, left: 0, right: 0, height: 72,
-        background: '#000', zIndex: 100,
-        display: 'flex', alignItems: 'center', padding: '0 24px',
-        gap: 24,
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+
+      {/* ── Sidebar ── */}
+      <aside style={{
+        position: 'fixed',
+        top: 0, left: 0, bottom: 0,
+        width: 'var(--sidebar-w)',
+        background: '#1a1410',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 100,
+        overflowY: 'auto',
       }}>
+
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginRight: 16 }}>
-          <img src="/logo-saf.png" alt="SAF Botafogo" style={{ height: 40, objectFit: 'contain' }}
-            onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
-          <span style={{
-            color: '#fff', fontFamily: 'Inter', fontWeight: 700,
-            fontSize: 15, letterSpacing: 2, textTransform: 'uppercase',
-            display: 'flex', alignItems: 'center', gap: 6,
+        <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+            <img
+              src="/logo-saf.png"
+              alt="SAF Botafogo"
+              style={{ height: 32, objectFit: 'contain' }}
+              onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+            />
+          </div>
+          <div style={{
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: 9,
+            fontWeight: 500,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(243,238,226,0.40)',
+            marginTop: 6,
           }}>
-            SAF <strong>BOTAFOGO</strong>
-            <span style={{ marginLeft: 4, opacity: 0.5, fontSize: 12, fontWeight: 400 }}>|</span>
-            <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.7, letterSpacing: 1 }}>
-              Gestão de Contratos
-            </span>
-          </span>
+            Gestão de Contratos
+          </div>
         </div>
 
-        {/* Divider */}
-        <div style={{ width: 1, height: 36, background: '#333', marginRight: 8 }} />
-
-        {/* Nav tabs */}
-        <nav style={{ display: 'flex', gap: 6 }}>
-          {PAGES.map(p => (
-            <button key={p.key} onClick={() => setPage(p.key)} style={{
-              background: page === p.key ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)',
-              border: page === p.key ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent',
-              color: page === p.key ? '#fff' : 'rgba(255,255,255,0.6)',
-              borderRadius: 6, padding: '7px 16px',
-              fontFamily: 'Inter', fontSize: 12, fontWeight: page === p.key ? 600 : 400,
-              cursor: 'pointer', letterSpacing: 0.5,
-              transition: 'all 0.15s',
-            }}>
-              {p.label}
-            </button>
+        {/* Nav */}
+        <nav style={{ flex: 1, padding: '16px 0' }}>
+          {NAV_SECTIONS.map(section => (
+            <div key={section.label} style={{ marginBottom: 8 }}>
+              <div style={{
+                fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: 9,
+                fontWeight: 500,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'rgba(190,140,74,0.90)',
+                padding: '6px 20px 4px',
+              }}>
+                {section.label}
+              </div>
+              {section.items.map(item => {
+                const active = page === item.key
+                return (
+                  <button
+                    key={item.key}
+                    onClick={() => setPage(item.key)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: '9px 20px',
+                      background: active ? 'rgba(190,140,74,0.15)' : 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'background 0.12s',
+                    }}
+                    onMouseEnter={e => {
+                      if (!active) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'
+                    }}
+                    onMouseLeave={e => {
+                      if (!active) (e.currentTarget as HTMLButtonElement).style.background = 'transparent'
+                    }}
+                  >
+                    <div style={{
+                      width: 3, height: 3, borderRadius: '50%',
+                      background: active ? '#be8c4a' : 'rgba(255,255,255,0.25)',
+                      flexShrink: 0,
+                    }} />
+                    <span style={{
+                      fontFamily: "'Inter', system-ui, sans-serif",
+                      fontSize: 13,
+                      fontWeight: active ? 600 : 400,
+                      color: active ? '#be8c4a' : 'rgba(243,238,226,0.70)',
+                      letterSpacing: active ? 0 : '-0.01em',
+                    }}>
+                      {item.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
           ))}
         </nav>
 
-        {/* Controles: idioma + moeda + data */}
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Dark mode toggle */}
-          <button
-            onClick={toggleDark}
-            title={isDark ? 'Modo claro' : 'Modo escuro'}
-            style={{
-              background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.08)',
-              border: isDark ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(255,255,255,0.15)',
-              color: isDark ? '#fff' : 'rgba(255,255,255,0.6)',
-              borderRadius: 4, padding: '3px 9px',
-              fontFamily: 'Inter', fontSize: 10, fontWeight: 600, letterSpacing: 0.5,
-              cursor: 'pointer', transition: 'all 0.15s',
-            }}
-          >
-            {isDark ? 'CLARO' : 'ESCURO'}
-          </button>
-
-          {/* Selector de idioma */}
-          <div style={{ display: 'flex', gap: 2 }}>
-            {LANGS.map(l => (
-              <button
-                key={l}
-                onClick={() => setLanguage(l.toLowerCase() as 'pt' | 'en' | 'es')}
-                style={{
-                  background: language === l.toLowerCase() ? 'rgba(255,255,255,0.2)' : 'transparent',
-                  border: language === l.toLowerCase() ? '1px solid rgba(255,255,255,0.35)' : '1px solid rgba(255,255,255,0.15)',
-                  color: language === l.toLowerCase() ? '#fff' : 'rgba(255,255,255,0.5)',
-                  borderRadius: 4, padding: '3px 7px',
-                  fontFamily: 'Inter', fontSize: 10, fontWeight: 600,
-                  cursor: 'pointer', letterSpacing: 0.5,
-                  transition: 'all 0.15s',
-                }}
-              >
-                {l}
-              </button>
-            ))}
+        {/* Controls */}
+        <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          {/* Language */}
+          <div style={{
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: 9, fontWeight: 500,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(243,238,226,0.35)',
+            marginBottom: 6,
+          }}>
+            Idioma
+          </div>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 14 }}>
+            {LANGS.map(l => {
+              const active = language === l.toLowerCase()
+              return (
+                <button
+                  key={l}
+                  onClick={() => setLanguage(l.toLowerCase() as 'pt' | 'en' | 'es')}
+                  style={{
+                    flex: 1,
+                    background: active ? 'rgba(190,140,74,0.20)' : 'rgba(255,255,255,0.05)',
+                    border: active ? '1px solid rgba(190,140,74,0.45)' : '1px solid rgba(255,255,255,0.08)',
+                    color: active ? '#dcc89a' : 'rgba(243,238,226,0.45)',
+                    borderRadius: 6, padding: '4px 0',
+                    fontFamily: "'IBM Plex Mono', monospace",
+                    fontSize: 9, fontWeight: 500, letterSpacing: '0.12em',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {l}
+                </button>
+              )
+            })}
           </div>
 
-          {/* Selector de moeda */}
+          {/* Currency */}
+          <div style={{
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: 9, fontWeight: 500,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(243,238,226,0.35)',
+            marginBottom: 6,
+          }}>
+            Moeda
+          </div>
           <select
             value={currency}
             onChange={e => setCurrency(e.target.value as AppCurrency)}
             style={{
-              background: '#222', color: '#fff',
-              border: '1px solid #444', borderRadius: 5,
-              padding: '4px 8px', fontSize: 11,
-              fontFamily: 'Inter', cursor: 'pointer',
+              width: '100%',
+              background: 'rgba(255,255,255,0.06)',
+              color: 'rgba(243,238,226,0.80)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              borderRadius: 7,
+              padding: '6px 10px',
+              fontSize: 12,
+              fontFamily: "'IBM Plex Mono', monospace",
+              cursor: 'pointer',
+              marginBottom: 14,
             }}
           >
             {CURRENCY_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value} style={{ background: '#222' }}>
+              <option key={opt.value} value={opt.value} style={{ background: '#1a1410' }}>
                 {opt.label}
               </option>
             ))}
           </select>
 
-          {/* Data atualização */}
-          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>
-            Atualizado: {new Date().toLocaleDateString('pt-BR')}
+          {/* Date */}
+          <div style={{
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontSize: 9,
+            color: 'rgba(243,238,226,0.28)',
+            letterSpacing: '0.08em',
+          }}>
+            Atualizado {new Date().toLocaleDateString('pt-BR')}
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* Content */}
-      <div style={{ paddingTop: 72 }}>
+      {/* ── Content ── */}
+      <main style={{
+        marginLeft: 'var(--sidebar-w)',
+        flex: 1,
+        minHeight: '100vh',
+        background: 'var(--cream-page)',
+      }}>
         {children(page)}
-      </div>
+      </main>
+
     </div>
   )
 }

@@ -1,11 +1,14 @@
 import { useState, useMemo } from 'react'
 import { atletas, fmtData, fmtMi, type StatusContrato } from '../data/mockData'
 import { useApp } from '../context/AppContext'
+import PageHero from '../components/PageHero'
 
 const STATUS_OPTS: (StatusContrato | 'Todos')[] = ['Todos', 'Elenco', 'Emprestado', 'Rescindido']
 const POSICOES = ['Todos', 'Goleiro', 'Zagueiro', 'Lateral Direito', 'Lateral Esquerdo', 'Volante', 'Meia', 'Meia-atacante', 'Atacante']
 
-const font = "'Inter', 'Segoe UI', sans-serif"
+const font = "'Inter', system-ui, sans-serif"
+const fontLabel = "'IBM Plex Mono', 'JetBrains Mono', monospace"
+const fontData = "'JetBrains Mono', ui-monospace, monospace"
 
 // Cálculos encargos
 const fgts = (clt: number) => clt * 0.08
@@ -44,7 +47,7 @@ function SortIcon({ active, dir }: { active: boolean; dir: 'asc' | 'desc' }) {
 }
 
 export default function PageConsolidado() {
-  const { fmtMiC, t, isDark } = useApp()
+  const { fmtMiC, t } = useApp()
 
   const [sortField, setSortField] = useState<string>('custoAnual')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -92,23 +95,25 @@ export default function PageConsolidado() {
   const totalGeral   = filtrados.reduce((s, a) => s + custoAnual(a), 0)
 
   const th: React.CSSProperties = {
-    padding: '9px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
-    color: 'var(--table-header-color)', background: 'var(--table-header-bg)', borderBottom: '2px solid var(--divider)',
-    fontFamily: font, whiteSpace: 'nowrap', position: 'sticky', top: 0, zIndex: 1,
+    padding: '9px 10px', fontSize: 9, fontWeight: 500, textTransform: 'uppercase',
+    color: 'var(--table-header-color)', background: 'var(--table-header-bg)', borderBottom: '1px solid var(--divider-strong)',
+    fontFamily: fontLabel, letterSpacing: '0.14em', whiteSpace: 'nowrap', position: 'sticky', top: 0, zIndex: 1,
     cursor: 'pointer', userSelect: 'none',
   }
   const td: React.CSSProperties = {
-    padding: '8px 10px', fontSize: 12, color: 'var(--text-primary)', fontFamily: font,
-    whiteSpace: 'nowrap',
+    padding: '8px 10px', fontSize: 12, color: 'var(--text-primary)', fontFamily: fontData,
+    whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums',
   }
   const tdr: React.CSSProperties = { ...td, textAlign: 'right' }
 
   return (
     <div style={{ padding: '12px 16px', maxWidth: 1600, margin: '0 auto', fontFamily: font }}>
 
+      <PageHero title="Consolidado" subtitle="VISÃO GERAL DO ELENCO" />
+
       {/* ── Filtros + Strip KPIs ── */}
       <div style={{
-        background: '#111', borderRadius: 10, marginBottom: 14,
+        background: 'var(--ink-primary)', borderRadius: 10, marginBottom: 14,
         display: 'flex', alignItems: 'center', padding: '12px 16px', gap: 0, flexWrap: 'wrap',
       }}>
         {/* Filtros */}
@@ -165,11 +170,11 @@ export default function PageConsolidado() {
                 <th style={{ ...th, textAlign: 'right' }}>{t('Auxílio Moradia (Mensal)')}</th>
                 <th style={{ ...th, textAlign: 'right' }}>{t('FGTS Mensal')}</th>
                 <th style={{ ...th, textAlign: 'right' }}>{t('INSS (Mensal)')}</th>
-                <th style={{ ...th, textAlign: 'right', background: isDark ? '#0d1a30' : '#eff4ff', color: isDark ? '#5090d8' : '#1a4fa0' }} onClick={() => handleSort('totalMensal')}>{t('Total Mensal')}<SortIcon active={sortField==='totalMensal'} dir={sortDir} /></th>
+                <th style={{ ...th, textAlign: 'right', background: 'rgba(190,140,74,0.12)', color: 'var(--gold-deep)' }} onClick={() => handleSort('totalMensal')}>{t('Total Mensal')}<SortIcon active={sortField==='totalMensal'} dir={sortDir} /></th>
                 <th style={{ ...th, textAlign: 'right' }}>{t('Auxílio Viagem (Anual)')}</th>
                 <th style={{ ...th, textAlign: 'right' }}>{t('Férias Anual')}</th>
                 <th style={{ ...th, textAlign: 'right' }}>{t('13º (Anual)')}</th>
-                <th style={{ ...th, textAlign: 'right', background: isDark ? '#0d2010' : '#f0f8f0', color: isDark ? '#4fd38c' : '#1a5a1a' }} onClick={() => handleSort('custoAnual')}>{t('Custo Anual')}<SortIcon active={sortField==='custoAnual'} dir={sortDir} /></th>
+                <th style={{ ...th, textAlign: 'right', background: 'var(--pos-tint)', color: 'var(--pos)' }} onClick={() => handleSort('custoAnual')}>{t('Custo Anual')}<SortIcon active={sortField==='custoAnual'} dir={sortDir} /></th>
               </tr>
             </thead>
             <tbody>
@@ -185,9 +190,10 @@ export default function PageConsolidado() {
                     <td style={{ ...td, color: 'var(--text-secondary)' }}>{t(a.posicao)}</td>
                     <td style={td}>
                       <span style={{
-                        padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 700, fontFamily: font,
-                        background: a.statusContrato === 'Elenco' ? '#e6f9f0' : a.statusContrato === 'Emprestado' ? '#fff3e0' : '#ffeef0',
-                        color: a.statusContrato === 'Elenco' ? '#1a7a4a' : a.statusContrato === 'Emprestado' ? '#e67e22' : '#c0392b',
+                        padding: '2px 8px', borderRadius: 4, fontSize: 9, fontWeight: 500, fontFamily: fontLabel,
+                        textTransform: 'uppercase', letterSpacing: '0.10em',
+                        background: a.statusContrato === 'Elenco' ? 'var(--pos-tint)' : a.statusContrato === 'Emprestado' ? 'var(--gold-tint)' : 'var(--neg-tint)',
+                        color: a.statusContrato === 'Elenco' ? 'var(--pos)' : a.statusContrato === 'Emprestado' ? 'var(--gold-deep)' : 'var(--neg)',
                       }}>{t(a.statusContrato)}</span>
                     </td>
                     <td style={{ ...td, color: '#666' }}>{fmtData(a.inicioContrato)}</td>
@@ -198,11 +204,11 @@ export default function PageConsolidado() {
                     <td style={tdr}>{a.auxilioMoradiaM > 0 ? fmtMi(a.auxilioMoradiaM) : '—'}</td>
                     <td style={tdr}>{fmtMi(fgts(a.salarioCLT))}</td>
                     <td style={tdr}>{fmtMi(inss(a.salarioCLT))}</td>
-                    <td style={{ ...tdr, fontWeight: 700, background: isDark ? '#0d1428' : '#f5f8ff' }}>{fmtMi(totalM)}</td>
+                    <td style={{ ...tdr, fontWeight: 600, background: 'rgba(190,140,74,0.07)' }}>{fmtMi(totalM)}</td>
                     <td style={tdr}>{a.auxilioViagemA > 0 ? fmtMi(a.auxilioViagemA) : '—'}</td>
                     <td style={tdr}>{fmtMi(feriasAnual(a.salarioCLT))}</td>
                     <td style={tdr}>{fmtMi(decimoTerceiro(a.salarioCLT))}</td>
-                    <td style={{ ...tdr, fontWeight: 700, background: isDark ? '#0d2010' : '#f5fcf5' }}>{fmtMi(totalA)}</td>
+                    <td style={{ ...tdr, fontWeight: 600, background: 'rgba(22,101,52,0.06)' }}>{fmtMi(totalA)}</td>
                   </tr>
                 )
               })}

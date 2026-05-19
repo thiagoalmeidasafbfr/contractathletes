@@ -1,27 +1,21 @@
 import { useState, useMemo } from 'react'
 import { atletas, passivosIntermediario, fmtData, statusColor, statusBg } from '../data/mockData'
 import { useApp } from '../context/AppContext'
+import PageHero from '../components/PageHero'
 
-const font = "'Inter', 'Segoe UI', sans-serif"
+const font = "'Inter', system-ui, sans-serif"
+const fontLabel = "'IBM Plex Mono', 'JetBrains Mono', monospace"
+const fontData = "'JetBrains Mono', ui-monospace, monospace"
 
 function StatusBadge({ status }: { status: string }) {
-  const { t, isDark } = useApp()
-  const darkBg: Record<string, string> = {
-    'Pago': '#0d2e1e', 'Atrasado': '#2d1520', 'A pagar': '#1e2538',
-    'Aguardando condição': '#1a1d27', 'Parcial': '#162010', 'Elenco': '#0d2e1e',
-    'Emprestado': '#2a1e0a', 'Rescindido': '#2d1520',
-  }
-  const darkColor: Record<string, string> = {
-    'Pago': '#4fd38c', 'Atrasado': '#f07070', 'A pagar': '#8a94b8',
-    'Aguardando condição': '#8a94b8', 'Parcial': '#80c850', 'Elenco': '#4fd38c',
-    'Emprestado': '#f0a050', 'Rescindido': '#f07070',
-  }
+  const { t } = useApp()
   return (
     <span style={{
-      background: isDark ? (darkBg[status] ?? '#1a1d27') : (statusBg[status] ?? '#f0f0f0'),
-      color: isDark ? (darkColor[status] ?? '#8a94b8') : (statusColor[status] ?? '#333'),
+      background: statusBg[status] ?? '#f0f0f0',
+      color: statusColor[status] ?? '#3a2e1c',
       padding: '2px 8px', borderRadius: 4,
-      fontSize: 11, fontWeight: 700, fontFamily: font,
+      fontSize: 9, fontWeight: 500, fontFamily: fontLabel,
+      textTransform: 'uppercase', letterSpacing: '0.10em',
     }}>{t(status)}</span>
   )
 }
@@ -30,28 +24,26 @@ function FakeShield({ name }: { name: string }) {
   const initials = name.replace(/[^A-Za-z\s]/g, '').split(' ').filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('')
   return (
     <svg width="52" height="58" viewBox="0 0 52 58" fill="none">
-      <path d="M26 3L49 11V30C49 43 38 52 26 55C14 52 3 43 3 30V11Z" fill="#111" stroke="#444" strokeWidth="1.5" />
+      <path d="M26 3L49 11V30C49 43 38 52 26 55C14 52 3 43 3 30V11Z" fill="#1a1410" stroke="rgba(190,140,74,0.4)" strokeWidth="1.5" />
       <text x="26" y="33" textAnchor="middle" fill="white" fontSize="15" fontFamily="Inter,sans-serif" fontWeight="700">{initials}</text>
     </svg>
   )
 }
 
-function KpiCard({ label, value, sub, bg, border, labelColor, valueColor, footnote, darkBg, darkBorder, darkLabelColor, darkValueColor }: {
+function KpiCard({ label, value, sub, bg, border, labelColor, valueColor, footnote }: {
   label: string; value: string; sub?: string
   bg: string; border: string; labelColor: string; valueColor: string
   footnote?: string
-  darkBg?: string; darkBorder?: string; darkLabelColor?: string; darkValueColor?: string
 }) {
-  const { isDark } = useApp()
   return (
     <div>
-      <div style={{ background: isDark ? (darkBg ?? '#1a1d27') : bg, border: `1px solid ${isDark ? (darkBorder ?? '#252d42') : border}`, borderRadius: 10, padding: '16px 20px' }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: isDark ? (darkLabelColor ?? '#8a94b8') : labelColor, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: font }}>{label}</div>
-        <div style={{ fontSize: 24, fontWeight: 800, color: isDark ? (darkValueColor ?? '#dde4f5') : valueColor, marginTop: 8, fontFamily: font, lineHeight: 1.1 }}>{value}</div>
-        {sub && <div style={{ fontSize: 10, color: isDark ? (darkLabelColor ?? '#8a94b8') : labelColor, fontFamily: font, marginTop: 4, opacity: 0.8 }}>{sub}</div>}
+      <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: 10, padding: '16px 20px' }}>
+        <div style={{ fontSize: 9, fontWeight: 500, color: labelColor, textTransform: 'uppercase', letterSpacing: '0.14em', fontFamily: fontLabel }}>{label}</div>
+        <div style={{ fontSize: 22, fontWeight: 500, color: valueColor, marginTop: 8, fontFamily: fontData, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>{value}</div>
+        {sub && <div style={{ fontSize: 10, color: labelColor, fontFamily: font, marginTop: 4, opacity: 0.8 }}>{sub}</div>}
       </div>
       {footnote && (
-        <div style={{ fontSize: 10, color: 'var(--text-faint)', fontStyle: 'italic', fontFamily: font, marginTop: 4, paddingLeft: 2 }}>
+        <div style={{ fontSize: 9, color: 'var(--text-faint)', fontStyle: 'italic', fontFamily: fontLabel, marginTop: 4, paddingLeft: 2, letterSpacing: '0.06em' }}>
           {footnote}
         </div>
       )}
@@ -121,20 +113,22 @@ export default function PageIntermediarios() {
   const interNome = interFiltro !== t('Todos') && interFiltro !== 'Todos' ? interFiltro : null
 
   const th: React.CSSProperties = {
-    padding: '9px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
-    color: 'var(--table-header-color)', background: 'var(--table-header-bg)', borderBottom: '2px solid var(--divider)',
-    fontFamily: font, whiteSpace: 'nowrap', position: 'sticky', top: 0, zIndex: 1,
+    padding: '9px 10px', fontSize: 9, fontWeight: 500, textTransform: 'uppercase',
+    color: 'var(--table-header-color)', background: 'var(--table-header-bg)', borderBottom: '1px solid var(--divider-strong)',
+    fontFamily: fontLabel, letterSpacing: '0.14em', whiteSpace: 'nowrap', position: 'sticky', top: 0, zIndex: 1,
     overflow: 'hidden', textOverflow: 'ellipsis',
     cursor: 'pointer', userSelect: 'none',
   }
   const td: React.CSSProperties = {
-    padding: '14px 10px', fontSize: 12, color: 'var(--text-primary)', fontFamily: font,
-    whiteSpace: 'normal', verticalAlign: 'top',
+    padding: '14px 10px', fontSize: 12, color: 'var(--text-primary)', fontFamily: fontData,
+    whiteSpace: 'normal', verticalAlign: 'top', fontVariantNumeric: 'tabular-nums',
   }
   const tdr: React.CSSProperties = { ...td, textAlign: 'right' }
 
   return (
     <div style={{ padding: '12px 16px', maxWidth: 1600, margin: '0 auto', fontFamily: font }}>
+
+      <PageHero title="Intermediários" subtitle="PASSIVO — INTERMEDIÁRIOS" />
 
       {/* ── Topo: Filtros + Display Intermediário + Valor Total ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr 200px', gap: 12, marginBottom: 12, alignItems: 'stretch' }}>
@@ -203,27 +197,23 @@ export default function PageIntermediarios() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 14 }}>
         <KpiCard
           label={t('Valores Pagos')} value={fmtMiC(totalPago)} sub={t('Incluindo Parciais')}
-          bg="#e8f9f0" border="#b8e8cc" labelColor="#1a7a4a" valueColor="#155c36"
+          bg="var(--pos-tint)" border="rgba(22,101,52,0.20)" labelColor="var(--pos)" valueColor="var(--pos)"
           footnote={t('*Considerando a PTAX do Pagamento')}
-          darkBg="#0d2e1e" darkBorder="#1a4a2e" darkLabelColor="#4fd38c" darkValueColor="#6feaaa"
         />
         <KpiCard
           label={t('Valores em Acordo')} value={fmtMiC(totalAcordo)} sub={`(${symbol})`}
-          bg="#f4f4f4" border="#ddd" labelColor="#666" valueColor="#333"
+          bg="var(--cream-canvas)" border="var(--divider-strong)" labelColor="var(--ink-secondary)" valueColor="var(--ink-primary)"
           footnote={t('*Considerando a PTAX do Vencimento')}
-          darkBg="#1a1d27" darkBorder="#252d42" darkLabelColor="#8a94b8" darkValueColor="#dde4f5"
         />
         <KpiCard
           label={t('Valores a Pagar')} value={fmtMiC(totalAPagar)} sub={`(${symbol})`}
-          bg="#fffbf0" border="#ffd080" labelColor="#9a6600" valueColor="#6a4400"
+          bg="var(--warn-tint)" border="rgba(184,138,42,0.25)" labelColor="var(--warn)" valueColor="var(--gold-deep)"
           footnote={t('*Considerando a PTAX atual.')}
-          darkBg="#2a1e0a" darkBorder="#4a3010" darkLabelColor="#f0a050" darkValueColor="#ffb860"
         />
         <KpiCard
           label={t('Valores em Atraso')} value={fmtMiC(totalAtraso)} sub={`(${symbol})`}
-          bg="#fff0f0" border="#ffb3b3" labelColor="#c0392b" valueColor="#8b0000"
+          bg="var(--neg-tint)" border="rgba(185,28,28,0.20)" labelColor="var(--neg)" valueColor="var(--neg)"
           footnote={t('*Considerando a PTAX do Vencimento')}
-          darkBg="#2d1520" darkBorder="#4a1f2a" darkLabelColor="#f07070" darkValueColor="#ff9090"
         />
       </div>
 

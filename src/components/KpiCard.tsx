@@ -9,7 +9,7 @@ export default function KpiCard({ label, value, sub, accent }: Props) {
   return (
     <div className="card" style={{
       padding: '14px 16px',
-      borderLeft: accent ? '4px solid #000' : '4px solid #e0e0e0',
+      borderLeft: accent ? `3px solid var(--gold)` : `1px solid var(--divider)`,
       minWidth: 0,
     }}>
       <div className="kpi-label">{label}</div>

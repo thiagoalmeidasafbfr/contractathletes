@@ -1,173 +1,197 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Cormorant+Garamond:ital,wght@1,600&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── Theme Variables ── */
+/* ── Glorioso Finance — Design Tokens ── */
 :root {
-  --page-bg: #ECEEF2;
-  --card-bg: #ffffff;
-  --card-border: #e8eaed;
-  --card-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.05);
-  --text-primary: #1a1a1a;
-  --text-secondary: #555555;
-  --text-muted: #888888;
-  --text-faint: #bbbbbb;
-  --table-header-bg: #f2f4f7;
-  --table-header-color: #555555;
-  --table-row-even: #fafbfc;
-  --table-row-hover: #f0f4ff;
-  --table-border: #f0f1f4;
-  --divider: #e8eaed;
-  --divider-soft: #eeeeee;
-  --divider-strong: #dddddd;
-  --bg-subtle: #f8f8f8;
-  --bg-subtle2: #f5f5f5;
-  --input-bg: #ffffff;
-  --input-border: #d8dae0;
-  --input-color: #222222;
-  --row-late-bg: #fff5f5;
-  --scrollbar-track: #f0f0f0;
-  --scrollbar-thumb: #c8c8c8;
-  --scrollbar-thumb-hover: #999999;
-}
+  /* Brand */
+  --gold:           #be8c4a;
+  --gold-soft:      #dcc89a;
+  --gold-deep:      #7a6244;
+  --gold-tint:      rgba(190,140,74,0.15);
+  --gold-ring:      rgba(190,140,74,0.18);
 
-[data-theme="dark"] {
-  --page-bg: #0d1117;
-  --card-bg: #161b27;
-  --card-border: #252d42;
-  --card-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 14px rgba(0,0,0,0.25);
-  --text-primary: #dde4f5;
-  --text-secondary: #8a94b8;
-  --text-muted: #5c6888;
-  --text-faint: #3e4a68;
-  --table-header-bg: #111624;
-  --table-header-color: #7a84a8;
-  --table-row-even: #131827;
-  --table-row-hover: #1b2235;
-  --table-border: #1e2538;
-  --divider: #252d42;
-  --divider-soft: #1e2538;
-  --divider-strong: #2d3550;
-  --bg-subtle: #111624;
-  --bg-subtle2: #0f1320;
-  --input-bg: #111624;
-  --input-border: #252d42;
-  --input-color: #dde4f5;
-  --row-late-bg: #2d1520;
-  --scrollbar-track: #161b27;
-  --scrollbar-thumb: #252d42;
-  --scrollbar-thumb-hover: #3a4468;
+  /* Ink */
+  --ink-primary:    #1a1410;
+  --ink-secondary:  #3a2e1c;
+
+  /* Cream surfaces */
+  --cream-page:     #f9f7f2;
+  --cream-canvas:   #f5f2eb;
+  --cream-card:     #fdfbf6;
+  --cream-inset:    #ece6d8;
+  --tbl-head:       #e7e5de;
+  --on-dark:        #f3eee2;
+
+  /* Semantic */
+  --pos:            #166534;
+  --pos-tint:       #dcf0e4;
+  --neg:            #b91c1c;
+  --neg-tint:       #fce8e8;
+  --warn:           #b88a2a;
+  --warn-tint:      rgba(184,138,42,0.12);
+
+  /* Structure */
+  --divider:        rgba(26,20,16,0.08);
+  --divider-soft:   rgba(26,20,16,0.05);
+  --divider-strong: rgba(26,20,16,0.14);
+  --sidebar-w:      220px;
+
+  /* Shadows */
+  --shadow-hair:    0 1px 0 rgba(40,32,22,0.03);
+  --shadow-card:    0 1px 0 rgba(40,32,22,0.04), 0 4px 12px -8px rgba(40,32,22,0.10);
+  --shadow-panel:   0 1px 0 rgba(40,32,22,0.04), 0 8px 20px -10px rgba(40,32,22,0.15);
+
+  /* Fonts */
+  --font-display:   'Fraunces', 'Cormorant Garamond', Georgia, serif;
+  --font-serif:     'Cormorant Garamond', Georgia, serif;
+  --font-body:      'Inter', system-ui, sans-serif;
+  --font-label:     'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --font-data:      'JetBrains Mono', ui-monospace, monospace;
+
+  /* Aliases used by page inline styles */
+  --page-bg:            var(--cream-page);
+  --card-bg:            var(--cream-card);
+  --card-border:        var(--divider);
+  --card-shadow:        var(--shadow-card);
+  --text-primary:       var(--ink-primary);
+  --text-secondary:     var(--ink-secondary);
+  --text-muted:         var(--gold-deep);
+  --text-faint:         rgba(26,20,16,0.35);
+  --table-header-bg:    var(--tbl-head);
+  --table-header-color: var(--ink-secondary);
+  --table-row-even:     var(--cream-canvas);
+  --table-row-hover:    var(--cream-inset);
+  --table-border:       var(--divider);
+  --bg-subtle:          var(--cream-canvas);
+  --bg-subtle2:         var(--cream-inset);
+  --input-bg:           var(--cream-card);
+  --input-border:       rgba(26,20,16,0.15);
+  --input-color:        var(--ink-primary);
+  --row-late-bg:        var(--neg-tint);
+  --scrollbar-track:    var(--cream-inset);
+  --scrollbar-thumb:    rgba(26,20,16,0.20);
+  --scrollbar-thumb-hover: rgba(26,20,16,0.38);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  background: var(--page-bg);
+  font-family: var(--font-body);
+  background: var(--cream-page);
   overflow-x: hidden;
-  color: var(--text-primary);
-  transition: background 0.2s ease, color 0.15s ease;
+  color: var(--ink-primary);
 }
 
 #root { width: 100%; }
 
 /* ── Cards ── */
 .card {
-  background: var(--card-bg);
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  background: var(--cream-card);
+  border-radius: 10px;
+  border: 1px solid var(--divider);
+  box-shadow: var(--shadow-hair);
+  transition: box-shadow 0.15s ease;
 }
+.card:hover { box-shadow: var(--shadow-card); }
 
 /* ── KPI classes ── */
 .kpi-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-family: var(--font-label);
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--ink-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.18em;
+  opacity: 0.7;
 }
 .kpi-value {
+  font-family: var(--font-data);
   font-size: 20px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-weight: 500;
+  color: var(--ink-primary);
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
-.kpi-sub { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+.kpi-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--gold-deep);
+  margin-top: 2px;
+}
 
 /* ── Tables ── */
 table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: auto; }
 
 thead th {
-  background: var(--table-header-bg);
-  padding: 7px 10px;
+  background: var(--tbl-head);
+  padding: 8px 10px;
   text-align: left;
-  font-weight: 700;
+  font-family: var(--font-label);
+  font-weight: 500;
   font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--table-header-color);
-  border-bottom: 2px solid var(--divider);
+  letter-spacing: 0.18em;
+  color: var(--ink-secondary);
+  border-bottom: 1px solid var(--divider-strong);
   position: sticky;
   top: 0;
   z-index: 1;
   white-space: nowrap;
-  transition: background 0.2s ease;
 }
 
-tbody tr { border-bottom: 1px solid var(--table-border); transition: background 0.1s; }
-tbody tr:nth-child(even) { background: var(--table-row-even); }
-tbody tr:hover { background: var(--table-row-hover) !important; }
+tbody tr { border-bottom: 1px solid var(--divider); }
+tbody tr:nth-child(even) { background: var(--cream-canvas); }
+tbody tr:hover { background: var(--cream-inset) !important; }
 
 tbody td {
-  padding: 7px 10px;
-  color: var(--text-primary);
-  font-size: 11px;
+  padding: 8px 10px;
+  color: var(--ink-primary);
+  font-family: var(--font-data);
+  font-size: 12px;
   white-space: normal;
   vertical-align: middle;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ── Badges ── */
-.badge {
+/* ── Chips / Badges ── */
+.chip, .badge {
   display: inline-block;
-  padding: 2px 9px;
-  border-radius: 10px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-label);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
 }
-.badge-ativo      { background: #e6f9f0; color: #1a7a4a; }
-.badge-inativo    { background: #ffeef0; color: #c0392b; }
-.badge-emprestado { background: #fff3e0; color: #d4700a; }
-.badge-acordo     { background: #e8f4fd; color: #1a6fa0; }
-
-[data-theme="dark"] .badge-ativo      { background: #0d2e1e; color: #4fd38c; }
-[data-theme="dark"] .badge-inativo    { background: #2d1218; color: #f07070; }
-[data-theme="dark"] .badge-emprestado { background: #2a1e0a; color: #f0a050; }
-[data-theme="dark"] .badge-acordo     { background: #0d1e30; color: #5090d8; }
+.chip-pos,  .badge-ativo      { background: var(--pos-tint);  color: var(--pos); }
+.chip-neg,  .badge-inativo    { background: var(--neg-tint);  color: var(--neg); }
+.chip-gold, .badge-emprestado { background: var(--gold-tint); color: var(--gold-deep); }
+.chip-neutral               { border: 1px solid var(--divider-strong); color: var(--ink-secondary); }
+.badge-acordo               { background: var(--gold-tint);  color: var(--gold-deep); }
 
 /* ── Inputs & Selects ── */
 select, input[type="text"] {
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 6px;
-  padding: 5px 10px;
+  background: var(--cream-card);
+  border: 1px solid rgba(26,20,16,0.15);
+  border-radius: 8px;
+  padding: 6px 10px;
   font-size: 12px;
-  font-family: 'Inter', sans-serif;
-  color: var(--input-color);
+  font-family: var(--font-body);
+  color: var(--ink-primary);
   outline: none;
-  transition: background 0.2s, border-color 0.2s;
+  transition: border-color 0.15s;
 }
 select:focus, input[type="text"]:focus {
-  border-color: var(--text-secondary);
-  box-shadow: 0 0 0 2px rgba(100,120,200,0.1);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-ring);
 }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--scrollbar-track); }
-::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+::-webkit-scrollbar-track { background: var(--cream-inset); }
+::-webkit-scrollbar-thumb { background: rgba(26,20,16,0.20); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(26,20,16,0.38); }
 
-/* ── Sort headers ── */
-thead th[style*="cursor: pointer"]:hover { filter: brightness(0.97); }
+/* ── Sort header hover ── */
+thead th[style*="cursor: pointer"]:hover { background: var(--cream-inset); }

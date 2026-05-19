@@ -1,8 +1,11 @@
 import React, { useState, useMemo } from 'react'
 import { atletas, parcelasDireitoImagem, fmtData, statusBg, statusColor } from '../data/mockData'
 import { useApp } from '../context/AppContext'
+import PageHero from '../components/PageHero'
 
-const font = "'Inter', 'Segoe UI', sans-serif"
+const font = "'Inter', system-ui, sans-serif"
+const fontLabel = "'IBM Plex Mono', 'JetBrains Mono', monospace"
+const fontData = "'JetBrains Mono', ui-monospace, monospace"
 
 type SortField = 'nome' | 'statusContrato' | 'alocacao' | 'inicioContrato' | 'fimContrato' | 'parcelas' | 'direitoImagem' | 'pagas'
 type SortDir = 'asc' | 'desc'
@@ -12,17 +15,15 @@ function SortIcon({ field, sortField, sortDir }: { field: SortField; sortField: 
   return <span style={{ fontSize: 9, marginLeft: 2 }}>{sortDir === 'asc' ? '↑' : '↓'}</span>
 }
 
-function KpiCard({ label, value, sub, bg, border, labelColor, valueColor, darkBg, darkBorder, darkLabelColor, darkValueColor }: {
+function KpiCard({ label, value, sub, bg, border, labelColor, valueColor }: {
   label: string; value: string; sub?: string
   bg: string; border: string; labelColor: string; valueColor: string
-  darkBg?: string; darkBorder?: string; darkLabelColor?: string; darkValueColor?: string
 }) {
-  const { isDark } = useApp()
   return (
-    <div style={{ background: isDark ? (darkBg ?? '#1a1d27') : bg, border: `1px solid ${isDark ? (darkBorder ?? '#252d42') : border}`, borderRadius: 10, padding: '16px 20px' }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: isDark ? (darkLabelColor ?? '#8a94b8') : labelColor, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: font }}>{label}</div>
-      <div style={{ fontSize: 24, fontWeight: 800, color: isDark ? (darkValueColor ?? '#dde4f5') : valueColor, marginTop: 8, fontFamily: font, lineHeight: 1.1 }}>{value}</div>
-      {sub && <div style={{ fontSize: 10, color: isDark ? (darkLabelColor ?? '#8a94b8') : labelColor, fontFamily: font, marginTop: 4, opacity: 0.8 }}>{sub}</div>}
+    <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: 10, padding: '16px 20px' }}>
+      <div style={{ fontSize: 9, fontWeight: 500, color: labelColor, textTransform: 'uppercase', letterSpacing: '0.14em', fontFamily: fontLabel }}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 500, color: valueColor, marginTop: 8, fontFamily: fontData, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>{value}</div>
+      {sub && <div style={{ fontSize: 10, color: labelColor, fontFamily: font, marginTop: 4, opacity: 0.8 }}>{sub}</div>}
     </div>
   )
 }
@@ -93,19 +94,21 @@ export default function PageImagem() {
     .reduce((s, p) => s + p.valor, 0)
 
   const th: React.CSSProperties = {
-    padding: '9px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
-    color: 'var(--table-header-color)', background: 'var(--table-header-bg)', borderBottom: '2px solid var(--divider)',
-    fontFamily: font, whiteSpace: 'nowrap', position: 'sticky', top: 0, zIndex: 1,
+    padding: '9px 10px', fontSize: 9, fontWeight: 500, textTransform: 'uppercase',
+    color: 'var(--table-header-color)', background: 'var(--table-header-bg)', borderBottom: '1px solid var(--divider-strong)',
+    fontFamily: fontLabel, letterSpacing: '0.14em', whiteSpace: 'nowrap', position: 'sticky', top: 0, zIndex: 1,
     cursor: 'pointer', userSelect: 'none',
   }
   const td: React.CSSProperties = {
-    padding: '12px 10px', fontSize: 12, color: 'var(--text-primary)', fontFamily: font,
-    whiteSpace: 'normal', verticalAlign: 'top',
+    padding: '12px 10px', fontSize: 12, color: 'var(--text-primary)', fontFamily: fontData,
+    whiteSpace: 'normal', verticalAlign: 'top', fontVariantNumeric: 'tabular-nums',
   }
   const tdr: React.CSSProperties = { ...td, textAlign: 'right' }
 
   return (
     <div style={{ padding: '12px 16px', maxWidth: 1600, margin: '0 auto', fontFamily: font }}>
+
+      <PageHero title="Direitos de Imagem" subtitle="GESTÃO DE IMAGEM" />
 
       {/* ── Filtros ── */}
       <div className="card" style={{ padding: '12px 16px', marginBottom: 12, display: 'flex', gap: 12, alignItems: 'center' }}>
@@ -128,24 +131,20 @@ export default function PageImagem() {
       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${totalAtrasado > 0 ? 4 : 3}, 1fr)`, gap: 12, marginBottom: 12 }}>
         <KpiCard
           label={t('Valor Mensal')} value={fmtMiC(totalMensal)} sub={`(${symbol})`}
-          bg="#f0f4ff" border="#c0cef8" labelColor="#2040a0" valueColor="#0a1f7a"
-          darkBg="#0d1428" darkBorder="#1a2a50" darkLabelColor="#5090d8" darkValueColor="#70b0f0"
+          bg="var(--gold-tint)" border="rgba(190,140,74,0.25)" labelColor="var(--gold-deep)" valueColor="var(--gold-deep)"
         />
         <KpiCard
           label={t('Valor Anual')} value={fmtMiC(totalAnual)} sub={`(${symbol})`}
-          bg="#f4f0ff" border="#c8b8f8" labelColor="#5020a0" valueColor="#30107a"
-          darkBg="#140d28" darkBorder="#2a1a50" darkLabelColor="#9060d8" darkValueColor="#b080f0"
+          bg="rgba(190,140,74,0.08)" border="rgba(190,140,74,0.18)" labelColor="var(--ink-secondary)" valueColor="var(--ink-primary)"
         />
         <KpiCard
           label={t('Maior Direito de Imagem')} value={maiorImagem ? maiorImagem.nome : '—'} sub={maiorImagem ? fmtMiC(maiorImagem.direitoImagem) : ''}
-          bg="#f8f8f8" border="#ddd" labelColor="#666" valueColor="#111"
-          darkBg="#1a1d27" darkBorder="#252d42" darkLabelColor="#8a94b8" darkValueColor="#dde4f5"
+          bg="var(--cream-canvas)" border="var(--divider-strong)" labelColor="var(--ink-secondary)" valueColor="var(--ink-primary)"
         />
         {totalAtrasado > 0 && (
           <KpiCard
             label={t('Total Atrasado')} value={fmtMiC(totalAtrasado)} sub={`(${symbol})`}
-            bg="#fff0f0" border="#ffb3b3" labelColor="#c0392b" valueColor="#8b0000"
-            darkBg="#2d1520" darkBorder="#4a1f2a" darkLabelColor="#f07070" darkValueColor="#ff9090"
+            bg="var(--neg-tint)" border="rgba(185,28,28,0.20)" labelColor="var(--neg)" valueColor="var(--neg)"
           />
         )}
       </div>

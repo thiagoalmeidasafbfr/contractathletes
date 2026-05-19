@@ -11,20 +11,24 @@ import {
   type Atleta, type StatusContrato, type Alocacao,
 } from '../data/mockData'
 import { useApp } from '../context/AppContext'
+import PageHero from '../components/PageHero'
 
 const STATUS_OPTS: (StatusContrato | 'Todos')[] = ['Todos', 'Elenco', 'Emprestado', 'Rescindido']
 const ALOC_OPTS: (Alocacao | 'Todos')[] = ['Todos', 'Profissional', 'Base']
 
-const font = "'Inter', 'Segoe UI', sans-serif"
+const font = "'Inter', system-ui, sans-serif"
+const fontLabel = "'IBM Plex Mono', 'JetBrains Mono', monospace"
+const fontData = "'JetBrains Mono', ui-monospace, monospace"
 
 function StatusBadge({ status }: { status: string }) {
   const { t } = useApp()
   return (
     <span style={{
       background: statusBg[status] ?? '#f0f0f0',
-      color: statusColor[status] ?? '#333',
+      color: statusColor[status] ?? '#3a2e1c',
       padding: '2px 8px', borderRadius: 4,
-      fontSize: 11, fontWeight: 700, fontFamily: font,
+      fontSize: 9, fontWeight: 500, fontFamily: fontLabel,
+      textTransform: 'uppercase', letterSpacing: '0.10em',
     }}>{t(status)}</span>
   )
 }
@@ -133,8 +137,8 @@ function BichoChart({ atleta, fillHeight }: { atleta: Atleta; fillHeight?: boole
   )
 }
 
-const td: React.CSSProperties = { padding: '4px 6px', fontSize: 11, color: '#333', fontFamily: font, overflow: 'hidden', whiteSpace: 'normal', verticalAlign: 'middle' }
-const th: React.CSSProperties = { padding: '5px 6px', fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: '#666', background: '#f8f8f8', borderBottom: '2px solid #eee', fontFamily: font, overflow: 'hidden', whiteSpace: 'normal' }
+const td: React.CSSProperties = { padding: '4px 6px', fontSize: 11, color: 'var(--ink-primary)', fontFamily: fontData, overflow: 'hidden', whiteSpace: 'normal', verticalAlign: 'middle', fontVariantNumeric: 'tabular-nums' }
+const th: React.CSSProperties = { padding: '5px 6px', fontSize: 9, fontWeight: 500, textTransform: 'uppercase', color: 'var(--ink-secondary)', background: 'var(--tbl-head)', borderBottom: '1px solid var(--divider-strong)', fontFamily: fontLabel, letterSpacing: '0.14em', overflow: 'hidden', whiteSpace: 'normal' }
 const trH: React.CSSProperties = { height: 48 }
 
 export default function PageAtletas() {
@@ -214,6 +218,8 @@ export default function PageAtletas() {
 
   return (
     <div style={{ padding: '8px 12px', maxWidth: 1600, margin: '0 auto', fontFamily: font }}>
+
+      <PageHero title="Atletas" subtitle="GESTÃO DE CONTRATOS" />
 
       {/* ── Barra de topo: apenas filtros ── */}
       <div className="card" style={{ padding: '6px 12px', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
